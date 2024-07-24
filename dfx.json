@@ -1,0 +1,29 @@
+{
+  "canisters": {
+    "MediTrack_backend": {
+      "declarations": {
+        "node_compatibility": true
+      },
+      "main": "src/MediTrack_backend/main.mo",
+      "type": "motoko"
+    },
+    "MediTrack_frontend": {
+      "dependencies": [
+        "MediTrack_backend"
+      ],
+      "source": [
+        "src/MediTrack_frontend/dist"
+      ],
+      "type": "assets",
+      "workspace": "MediTrack_frontend"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "output_env_file": ".env",
+  "version": 1
+}
