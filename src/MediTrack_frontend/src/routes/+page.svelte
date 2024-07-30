@@ -2,6 +2,27 @@
   import Navbar from '../routes/components/Navbar.svelte';
   import heroImage from '../routes/assets/med.jpeg';
   import '../index.scss';
+  import { authenticate, getUserRole } from '../services/authService';
+
+  async function handleGetStarted() {
+    try {
+      await authenticate();
+      const role = await getUserRole();
+
+      if (role === 'healthcareProvider') {
+        window.location.href = '/healthcare-dashboard';
+      } else if (role === 'manufacturer') {
+        window.location.href = '/manufacturer-dashboard';
+      } else if (role === 'governmentAgency') {
+        window.location.href = '/government-dashboard';
+      } else {
+        alert('Unknown role');
+      }
+    } catch (error) {
+      console.error('Authentication failed', error);
+      alert('Failed to authenticate. Please try again.');
+    }
+  }
 </script>
 
 <Navbar />
@@ -13,14 +34,14 @@
       <h2 class="text-5xl font-bold mb-4">Welcome to MediTrack+</h2>
       <p class="text-2xl mb-8">An Integrated Solution to Combat Pharmaceutical Corruption</p>
       <div class="flex flex-col md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-4">
-        <button class="bg-gray-600 text-white font-bold py-2 px-4 rounded-lg">Get Started</button>
+        <button class="bg-gray-600 text-white font-bold py-2 px-4 rounded-lg" on:click={handleGetStarted}>Get Started</button>
         <button class="bg-red-400 border border-white text-black font-bold py-2 px-4 rounded-lg">Report Crime</button>
       </div>
     </div>
   </div>
 </section>
 
-<section id="about" class="bg-gray-100  py-12">
+<section id="about" class="bg-white py-12">
   <div class="container mx-auto px-4 text-gray-800">
     <h2 class="text-4xl font-bold mb-4">About MediTrack+</h2>
     <p class="text-lg mb-4">MediTrack+ is a comprehensive platform that uses AI and blockchain to monitor and manage drug distribution, ensuring integrity and transparency. It provides a secure system for reporting corruption and ensures the quality of drugs in the supply chain.</p>
