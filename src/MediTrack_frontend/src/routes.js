@@ -1,6 +1,6 @@
 // src/routes.js
 import Home from './routes/+page.svelte';
-import RegulatorsDashboard from './routes/components/RegulatorsDashboard.svelte';
+import RegulatorsDashboard from './routes/regulators-dashboard/RegulatorDashboard';
 import PharmaceuticalDashboard from './routescomponents/PharmaceuticalDashboard.svelte';
 import PharmacyDashboard from './routes/components/PharmacyDashboard.svelte';
 import ConsumerDashboard from './routes/components/ConsumerDashboard.svelte';

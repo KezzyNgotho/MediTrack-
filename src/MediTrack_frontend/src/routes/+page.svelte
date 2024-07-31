@@ -1,39 +1,38 @@
 <script>
   import Navbar from '../routes/components/Navbar.svelte';
-  import heroImage from '../routes/assets/med.jpeg';
+  import { handleSignIn, selectedRole } from '../Services/auth.js';
+  import { get } from 'svelte/store';
   import '../index.scss';
-  import { authenticate, getUserRole } from '../services/authService';
 
-  async function handleGetStarted() {
-    try {
-      await authenticate();
-      const role = await getUserRole();
+  const handleRoleChange = (event) => {
+    selectedRole.set(event.target.value);
+  };
 
-      if (role === 'healthcareProvider') {
-        window.location.href = '/healthcare-dashboard';
-      } else if (role === 'manufacturer') {
-        window.location.href = '/manufacturer-dashboard';
-      } else if (role === 'governmentAgency') {
-        window.location.href = '/government-dashboard';
-      } else {
-        alert('Unknown role');
-      }
-    } catch (error) {
-      console.error('Authentication failed', error);
-      alert('Failed to authenticate. Please try again.');
+  const handleGetStarted = async () => {
+    const role = get(selectedRole);
+    if (!role) {
+      alert('Please select a role.');
+      return;
     }
-  }
+    await handleSignIn();
+  };
 </script>
 
 <Navbar />
 
 <section class="bg-gray-100 py-12">
-  <!-- Hero Section -->
   <div class="relative bg-gray-200 text-black py-24">
     <div class="relative container mx-auto px-4 text-center">
       <h2 class="text-5xl font-bold mb-4">Welcome to MediTrack+</h2>
       <p class="text-2xl mb-8">An Integrated Solution to Combat Pharmaceutical Corruption</p>
       <div class="flex flex-col md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-4">
+        <select on:change={handleRoleChange} class="bg-gray-600 text-white font-bold py-2 px-4 rounded-lg">
+          <option value="">Select your role</option>
+          <option value="healthcareProvider">Healthcare Provider</option>
+          <option value="regulator">Regulator</option>
+          <option value="manufacturer">Manufacturer</option>
+          <option value="governmentAgency">Government Agency</option>
+        </select>
         <button class="bg-gray-600 text-white font-bold py-2 px-4 rounded-lg" on:click={handleGetStarted}>Get Started</button>
         <button class="bg-red-400 border border-white text-black font-bold py-2 px-4 rounded-lg">Report Crime</button>
       </div>
@@ -99,12 +98,12 @@
 </section>
 
 <footer class="py-6 bg-gray-200 text-gray-800">
-  <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
+  <div class="max-w-7xl mx-auto px-4 flex justify-between items-center">
     <p>&copy; 2024 MediTrack+. All rights reserved.</p>
-    <div class="flex space-x-4 mt-4 md:mt-0">
-      <a href="#" class="text-gray-800 hover:text-gray-600">Facebook</a>
-      <a href="#" class="text-gray-800 hover:text-gray-600">Twitter</a>
-      <a href="#" class="text-gray-800 hover:text-gray-600">LinkedIn</a>
+    <div class="flex space-x-4">
+      <a href="https://facebook.com" class="text-gray-800 hover:text-gray-600">Facebook</a>
+      <a href="https://twitter.com" class="text-gray-800 hover:text-gray-600">Twitter</a>
+      <a href="https://linkedin.com" class="text-gray-800 hover:text-gray-600">LinkedIn</a>
     </div>
   </div>
 </footer>
