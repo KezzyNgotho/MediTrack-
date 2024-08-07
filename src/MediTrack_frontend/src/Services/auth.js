@@ -33,8 +33,8 @@ async function navigateToDashboard() {
   const role = await getUserRole();
   if (role === 'regulator') {
     window.location.href = '/regulators-dashboard';
-  } else if (role === 'pharmaceuticalCompany') {
-    window.location.href = '/companies-dashboard';
+  } else if (role === 'manufacturer') {
+    window.location.href = '/manufacturer-dashboard';
   } else if (role === 'pharmacy') {
     window.location.href = '/pharmacies-dashboard';
   } else if (role === 'consumer') {

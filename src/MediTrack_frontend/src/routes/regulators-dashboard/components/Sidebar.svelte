@@ -1,45 +1,55 @@
 <script>
   import { createEventDispatcher } from 'svelte';
-
+  import '../styles/Dashboard.scss';
+  
   const dispatch = createEventDispatcher();
 
   function handleLinkClick(view) {
     dispatch('linkClick', view);
   }
+
+  // Font Awesome Icons
+  import { faHome, faFileAlt, faBell, faHistory, faCog, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+  import { FontAwesomeIcon } from '@fortawesome/svelte-fontawesome';
 </script>
 
-<aside class="bg-gray-800 text-white w-64 min-h-screen">
-  <div class="flex flex-col h-full">
-    <div class="p-6 bg-gray-900">
-      <h2 class="text-2xl font-bold">MediTrack+</h2>
-    </div>
-    <nav class="flex-1 overflow-y-auto">
-      <ul class="p-6 space-y-2">
-        <li>
-          <a href="#" class="block py-2 px-4 rounded-lg hover:bg-gray-700 focus:outline-none focus:bg-gray-600" on:click={() => handleLinkClick('dashboard')}>Dashboard</a>
-        </li>
-        <li>
-          <a href="#" class="block py-2 px-4 rounded-lg hover:bg-gray-700 focus:outline-none focus:bg-gray-600" on:click={() => handleLinkClick('reports')}>Reports</a>
-        </li>
-        <li>
-          <a href="#" class="block py-2 px-4 rounded-lg hover:bg-gray-700 focus:outline-none focus:bg-gray-600" on:click={() => handleLinkClick('alerts')}>Alerts</a>
-        </li>
-        <li>
-          <a href="#" class="block py-2 px-4 rounded-lg hover:bg-gray-700 focus:outline-none focus:bg-gray-600" on:click={() => handleLinkClick('activities')}>Recent Activities</a>
-        </li>
-        <li>
-          <a href="#" class="block py-2 px-4 rounded-lg hover:bg-gray-700 focus:outline-none focus:bg-gray-600" on:click={() => handleLinkClick('settings')}>Settings</a>
-        </li>
-      </ul>
-    </nav>
-    <div class="p-6 bg-gray-900">
-      <a href="/logout" class="block py-2 px-4 rounded-lg hover:bg-gray-700 focus:outline-none focus:bg-gray-600">Logout</a>
-    </div>
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <h2>MediTrack+</h2>
+  </div>
+  <nav class="sidebar-nav">
+    <ul class="nav-list">
+      <li>
+        <a href="#" class="nav-item" on:click={() => handleLinkClick('dashboard')}>
+          <FontAwesomeIcon icon={faHome} class="icon" />
+          <span>Dashboard</span>
+        </a>
+      </li>
+      <li>
+        <a href="#" class="nav-item" on:click={() => handleLinkClick('reports')}>
+          <FontAwesomeIcon icon={faFileAlt} class="icon" />
+          <span>Reports</span>
+        </a>
+      </li>
+      <li>
+        <a href="#" class="nav-item" on:click={() => handleLinkClick('alerts')}>
+          <FontAwesomeIcon icon={faBell} class="icon" />
+          <span>Alerts</span>
+        </a>
+      </li>
+      <li>
+        <a href="#" class="nav-item" on:click={() => handleLinkClick('activities')}>
+          <FontAwesomeIcon icon={faHistory} class="icon" />
+          <span>Recent Activities</span>
+        </a>
+      </li>
+      
+    </ul>
+  </nav>
+  <div class="sidebar-footer">
+    <a href="/logout" class="nav-item">
+      <FontAwesomeIcon icon={faSignOutAlt} class="icon" />
+      <span>Logout</span>
+    </a>
   </div>
 </aside>
-
-<style>
-  a {
-    transition: background-color 0.2s ease;
-  }
-</style>
