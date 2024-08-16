@@ -1,124 +1,68 @@
-<script>
-  import logo from '../assets/logo.png';
-  import '../styles/app.scss';
-  let menuOpen = false;
+<script lang="ts">
+  let isMenuOpen = false;
 
   function toggleMenu() {
-    menuOpen = !menuOpen;
-  }
-
-  async function handleGetStarted() {
-    const role = get(selectedRole);
-    if (role) {
-      showRoleSelectionPopup = false; // Close the popup
-      await navigateToDashboard(); // Navigate based on role
-    } else {
-      alert('Please select your role.');
-    }
+      isMenuOpen = !isMenuOpen;
   }
 </script>
 
-<nav class="bg-white p-4">
-  <div class="max-w-7xl mx-auto flex justify-between items-center">
-    <div class="flex items-center text-black">
-      <!-- Replace the src with the path to your logo image -->
-      <img src={logo} alt="Logo" class="w-19 h-20 mr-2" />
-      <span class="text-lg font-extrabold tracking-wide">MediTrack+</span>
-    </div>
-    <div class="hidden md:flex items-center space-x-6">
-      <a href="/" class="text-black text-bold hover:text-blue-600 flex items-center">
-        <span class="mr-2 tracking-tight">Home</span>
-        <span class="text-black">•</span>
-      </a>
-      <a href="#about" class="text-black font-bold hover:text-blue-600 flex items-center">
-        <span class="mr-2 tracking-tight">About</span>
-        <span class="text-black">•</span>
-      </a>
-      <a href="#features" class="text-black font-bold hover:text-blue-600 flex items-center">
-        <span class="mr-2 tracking-tight">Features</span>
-        <span class="text-black">•</span>
-      </a>
-      <a href="#contact" class="text-black font-bold hover:text-blue-600 flex items-center">
-        <span class="mr-2 tracking-tight">Contact</span>
-      </a>
-    </div>
-    <button class="bg-blue-200 text-black font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-pink-200 transition-colors flex items-center space-x-2" on:click={handleGetStarted}>
-      <span class="flex items-center space-x-2 font-extrabold">
-        <span class="tracking-tight">Get Started</span>
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-7-7l7 7-7 7"></path>
-        </svg>
-      </span>
-    </button>
-    <button class="md:hidden text-black font-bold" on:click={toggleMenu}>
-      ☰
-    </button>
+<header class="bg-[#0f535c] text-white py-4 px-6 flex flex-col md:flex-row items-center justify-between relative">
+  <!-- Left Section: Icon and Title -->
+  <div class="flex items-center space-x-4 w-full md:w-auto">
+      <!-- Circle Icon with Outline -->
+      <div class="relative flex items-center justify-center">
+          <a href="/">
+              <img 
+                  src="/logo.png" 
+                  alt="Icon" 
+                  class="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-20 lg:h-20 rounded-full border-4 border-blue-200 object-cover max-w-full"
+              />
+          </a>
+      </div>
+      <h1 class="text-xl sm:text-2xl md:text-3xl font-bold ml-2">MediTrack+</h1>
   </div>
-  {#if menuOpen}
-    <div class="md:hidden mt-4 space-y-2">
-      <a href="/" class="block text-black hover:text-blue-600 flex items-center font-extrabold">
-        <span class="mr-2 tracking-tight">Home</span>
-        <span class="text-black">•</span>
-      </a>
-      <a href="#about" class="block text-black hover:text-blue-600 flex items-center font-extrabold">
-        <span class="mr-2 tracking-tight">About</span>
-        <span class="text-black">•</span>
-      </a>
-      <a href="#features" class="block text-black hover:text-blue-600 flex items-center font-extrabold">
-        <span class="mr-2 tracking-tight">Features</span>
-        <span class="text-black">•</span>
-      </a>
-      <a href="#contact" class="block text-black hover:text-blue-600 text-bold text-2xl flex items-center font-extrabold">
-        <span class="mr-2 tracking-tight">Contact</span>
-      </a>
-    </div>
+
+  <!-- Center Section: Navigation Links for Desktop -->
+  <nav class="hidden md:flex flex-grow justify-center space-x-6 mt-4 md:mt-0">
+      {#each ['Newsletter', 'Forum', 'Gateway', 'Agency'] as link}
+          <a href="#" class="text-white hover:text-[#0f535c] border border-blue-200 hover:border-blue-200 px-4 py-2 rounded transition-all duration-300">{link}</a>
+      {/each}
+  </nav>
+
+  <!-- Right Section: Buttons -->
+  <div class="flex flex-wrap space-x-4 mt-4 md:mt-0">
+      <button class="bg-gray-800 text-white px-4 py-2 rounded-full shadow-md hover:bg-gray-700 transition-all duration-300 flex items-center space-x-2">
+          <span class="text-sm md:text-base">Get Started</span>
+          <span role="img" aria-label="Get Involved">🚀</span>
+      </button>
+      <button class="bg-transparent border border-blue-200 text-white px-4 py-2 rounded-full shadow-md hover:border-blue-200 hover:bg-blue-300 transition-all duration-300 flex items-center space-x-2">
+          <span class="text-sm md:text-base">Partner with Us</span>
+          <span role="img" aria-label="Partner with Us">🤝</span>
+      </button>
+  </div>
+
+  <!-- Mobile Menu Toggle Button -->
+  <button class="md:hidden absolute top-4 right-4 text-white focus:outline-none" on:click={toggleMenu}>
+      <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+      </svg>
+  </button>
+
+  <!-- Mobile Navigation Menu -->
+  {#if isMenuOpen}
+      <div class="fixed inset-0 bg-blue-200 text-white flex flex-col items-center justify-center space-y-6 md:hidden">
+          <!-- Close Button -->
+          <button class="text-white bg-emerald-700 hover:bg-blue-200 rounded-full p-3 border-2 border-emerald-500 shadow-glow hover:shadow-lg transition-all duration-300 mb-6" on:click={toggleMenu}>
+              <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+          </button>
+          <!-- Navigation Links -->
+          <div class="flex flex-col items-center space-y-6">
+              {#each ['Newsletter', 'Forum', 'Gateway', 'Agency'] as link}
+                  <a href="#" class="text-white hover:text-blue-200 border border-blue-200 hover:border--100 px-6 py-2 rounded transition-all duration-300">{link}</a>
+              {/each}
+          </div>
+      </div>
   {/if}
-</nav>
-
-<style>
-  /* Additional styles for the navbar */
-  .navbar-link {
-    transition: color 0.3s ease;
-  }
-
-  .navbar-link:hover {
-    color: hsl(211, 70%, 6%); /* Light blue color for hover effect */
-  }
-
-  .navbar-button {
-    transition: background-color 0.3s ease;
-  }
-
-  .navbar-button:hover {
-    background-color: #030e1b; /* Slightly darker blue for hover effect */
-  }
-
-  /* Font and styles to make the text bold and sharp */
-  nav .font-extrabold {
-    font-weight: 800;
-  }
-
-  nav a.text-bold {
-    font-weight: 700;
-  }
-
-  nav span.tracking-tight {
-    letter-spacing: -0.015em;
-  }
-
-  nav .text-lg {
-    font-size: 1.25rem; /* Large font for logo text */
-  }
-
-  nav a span {
-    font-size: 1rem; /* Standard size for links */
-  }
-
-  nav button {
-    font-size: 1rem; /* Standard size for buttons */
-  }
-
-  nav .flex span {
-    font-size: 1.125rem; /* Slightly larger size for Get Started button */
-  }
-</style>
+</header>

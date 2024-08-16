@@ -3,8 +3,8 @@
   import { authenticate } from '../Services/auth';
   import { writable, get } from 'svelte/store';
   import '../index.scss';
-  import image1 from '../routes/assets/download.jpeg';
-  import image2 from '../routes/assets/downloadhh.jpeg'
+  import image1 from './../../static/download.jpeg';
+  import image2 from './../../static/downloadhh.jpeg'
 
   let signedIn = false;
   let showRoleSelectionPopup = false;
@@ -63,7 +63,8 @@
 
 <section class="hero color-[#DFF5FF]">
   <div class="hero-content">
-    <h2>Welcome to MediTrack+</h2>
+    <h2 class=" text-4xl md:text-4xl font-bold hero-text mb-4 text-[#0f535c]" >Welcome to MediTrack+</h2>
+    
     <p>An Integrated Solution to Combat Pharmaceutical Corruption</p>
 
     {#if !signedIn}
@@ -325,8 +326,8 @@ circle {
   }
 
   .btn-primary {
-    background-color: #90CAF9;
-    color: black;
+    background-color: #0f535c;
+    color: white;
     padding: 0.75rem 1.5rem;
     border: none;
     border-radius: 0.5rem;
@@ -336,13 +337,13 @@ circle {
   }
 
   .btn-primary:hover {
-    background-color: #90CAF9;
+    background-color: #0f535c;
     transform: scale(1.05);
   }
 
   .btn-secondary {
-    background-color: #fff;
-    color: #333;
+    background-color: #0f535c;
+    color: #fff;
     padding: 0.75rem 1.5rem;
     border: none;
     border-radius: 0.5rem;
@@ -363,7 +364,7 @@ circle {
     left: 0;
     width: 100%;
     height: 100%;
-    background: #eecccc80;
+    background: #0f535c;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -376,7 +377,7 @@ circle {
     padding: 2rem;
     width: 90%;
     max-width: 400px;
-    box-shadow: 0 0 10px #f1d9d9;
+    box-shadow: 0 0 10px #0f535c;
     text-align: center;
     position: relative;
   }
@@ -476,7 +477,7 @@ circle {
   }
 
   .social-links a {
-    color: hsl(309, 59%, 79%);
+    color: #0f535c;
     margin: 0 0.5rem;
     text-decoration: none;
   }

@@ -2,6 +2,16 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
+
+
+:root {
+  --background-color: #0f535c; /* Example color matching your header and footer */
+}
+
+body {
+  background-color: var(--background-color);
+}
+
 // Global Styles
 body {
   font-family: 'Arial', sans-serif;
@@ -88,7 +98,7 @@ a {
 
 // Custom utility classes
 .btn-primary {
-  @apply bg-blue-500 text-white font-semibold rounded-lg shadow-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition;
+  @apply bg-[#0f535c] text-white font-semibold rounded-lg shadow-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition;
 }
 
 .btn-secondary {

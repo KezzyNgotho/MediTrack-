@@ -1,54 +1,57 @@
-import Array "mo:base/Array";
-actor Patient {
+import Patient "./patient";
+import Regulator "./Regulator";
+import Manufacturer "Manufacturer.mo";
+import Government "Government.mo";
 
-  type Dependant = {
-    id: Nat;
-    name: Text;
-    age: Nat;
-    relationship: Text;
-    lastCheckup: Text;
-    healthStatus: Text;
+actor Main {
+
+  // Create instances of the actors
+  stable var patientActor: [Principal] = [];
+  stable var regulatorActor: Principal = Regulator;
+  stable var manufacturerActor: [Principal] = [];
+  stable var governmentActor: Principal = Government;
+
+  // Function to add a new patient actor
+  public func createPatient(): async Principal {
+    let newPatient = await Patient();
+    patientActor := Array.append(patientActor, [newPatient]);
+    return newPatient;
   };
 
-  type Appointment = {
-    id: Nat;
-    doctorName: Text;
-    specialty: Text;
-    date: Text;
-    notes: Text;
+  // Function to add a new manufacturer actor
+  public func createManufacturer(): async Principal {
+    let newManufacturer = await Manufacturer();
+    manufacturerActor := Array.append(manufacturerActor, [newManufacturer]);
+    return newManufacturer;
   };
 
-  var dependants: [Dependant] = [];
-  var appointments: [Appointment] = [];
-
-  public func addDependant(dep: Dependant): async () {
-    dependants := Array.append(dependants, [dep]);
+  // Expose the government actor
+  public func getGovernmentActor(): async Principal {
+    return governmentActor;
   };
 
-  public func getDependants(): async [Dependant] {
-    return dependants;
+  // Expose the regulator actor
+  public func getRegulatorActor(): async Principal {
+    return regulatorActor;
   };
 
-  public func addAppointment(app: Appointment): async () {
-    appointments := Array.append(appointments, [app]);
+  // Get the list of all patients
+  public func getPatientActors(): async [Principal] {
+    return patientActor;
   };
 
-  public func getAppointments(): async [Appointment] {
-    return appointments;
+  // Get the list of all manufacturers
+  public func getManufacturerActors(): async [Principal] {
+    return manufacturerActor;
   };
 
-  public func getMedicalHistory(): async [Text] {
-    // Demo medical history data
-    return ["Hypertension - Under control", "Diabetes Type 2 - Regular monitoring required"];
+  // Clean up a patient actor (Example of deletion - might depend on certain criteria)
+  public func removePatient(patientId: Principal): async () {
+    patientActor := patientActor.filter(func (p) { p != patientId });
   };
 
-  public func getMedication(): async [Text] {
-    // Demo medication data
-    return ["Metformin - 500mg twice daily", "Lisinopril - 10mg daily"];
-  };
-
-  public func getLabResults(): async [Text] {
-    // Demo lab results data
-    return ["Blood Glucose - 140 mg/dL", "Cholesterol Level - 180 mg/dL"];
+  // Clean up a manufacturer actor (Example of deletion - might depend on certain criteria)
+  public func removeManufacturer(manufacturerId: Principal): async () {
+    manufacturerActor := manufacturerActor.filter(func (m) { m != manufacturerId });
   };
 }
