@@ -6,6 +6,7 @@ import PharmacyDashboard from './routes/components/PharmacyDashboard.svelte';
 import ConsumerDashboard from './routes/components/ConsumerDashboard.svelte';
 import WhistleblowerDashboard from './routes/components/WhistleblowerDashboard.svelte';
 
+
 export default {
   '/': Home,
   '/regulators-dashboard': RegulatorsDashboard,

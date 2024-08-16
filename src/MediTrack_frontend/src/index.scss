@@ -1,25 +1,104 @@
-/* src/app.css */
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
+// Global Styles
 body {
-  @apply bg-gray-100 text-gray-800;
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: #F4F7FA; /* Light grey background */
 }
 
 a {
-  @apply text-blue-600 hover:text-blue-500;
+  text-decoration: none;
+  color: inherit;
 }
 
-button {
-  @apply bg-blue-600 text-white hover:bg-blue-500 transition duration-300;
+// Utility Classes for Responsive Design
+@media (max-width: 768px) {
+  .hero {
+    background-position: center;
+    padding: 16px 8px;
+  }
+
+  .btn-primary, .btn-secondary {
+    padding: 12px 24px;
+    font-size: 0.875rem; // Adjust font size for smaller screens
+  }
+
+  .section-padding {
+    padding: 16px;
+  }
+
+  .text-center-lg {
+    text-align: center;
+  }
 }
 
-.hero-section {
-  @apply bg-cover bg-center bg-no-repeat h-[80vh];
+@media (min-width: 769px) {
+  .hero {
+    background-position: right center;
+    padding: 24px 32px;
+  }
+
+  .btn-primary, .btn-secondary {
+    padding: 16px 32px;
+    font-size: 1rem;
+  }
+
+  .section-padding {
+    padding: 32px 24px;
+  }
+
+  .text-center-lg {
+    text-align: left;
+  }
 }
 
-.about-section, .features-section, .contact-section {
-  @apply py-12 bg-white text-gray-800;
+// Additional styles for responsiveness
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+@media (max-width: 1024px) {
+  .container {
+    max-width: 90%;
+  }
+}
+
+// Media queries for smaller devices
+@media (max-width: 640px) {
+  .text-lg {
+    font-size: 1.125rem;
+  }
+
+  .text-xl {
+    font-size: 1.25rem;
+  }
+
+  .btn-primary, .btn-secondary {
+    font-size: 0.875rem;
+    padding: 12px 24px;
+  }
+}
+
+// Custom utility classes
+.btn-primary {
+  @apply bg-blue-500 text-white font-semibold rounded-lg shadow-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition;
+}
+
+.btn-secondary {
+  @apply bg-gray-500 text-white font-semibold rounded-lg shadow-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 transition;
+}
+
+.hero {
+  @apply relative text-white;
+}
+
+.section-padding {
+  @apply py-16 px-6;
 }

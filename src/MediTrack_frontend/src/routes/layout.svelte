@@ -12,7 +12,7 @@
       goto('/manufacture-dashboard');
     } else if (userRole === 'pharmacy') {
       goto('/pharmacies-dashboard');
-    } else if (userRole === 'consumer') {
+    } else if (userRole === 'patient') {
       goto('/consumers-dashboard');
     } else if (userRole === 'governmentAgency') {
       goto('/government-agencies-dashboard');

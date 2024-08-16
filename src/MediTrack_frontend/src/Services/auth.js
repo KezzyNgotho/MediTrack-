@@ -1,3 +1,4 @@
+// src/Services/auth.js
 import { AuthClient } from '@dfinity/auth-client';
 import { writable } from 'svelte/store';
 
@@ -7,13 +8,14 @@ export async function authenticate() {
   try {
     const authClient = await AuthClient.create();
     await authClient.login({
-      identityProvider: process.env.II_URL,
-      onSuccess: () => {
+      identityProvider: import.meta.env.VITE_II_URL,
+      onSuccess: async () => {
         console.log("Logged in!");
-        navigateToDashboard();
+        await navigateToDashboard();
       },
-    }).catch((error) => {
-      console.error("Login failed:", error);
+      onError: (error) => {
+        console.error("Login failed:", error);
+      }
     });
   } catch (error) {
     console.error("AuthClient creation failed:", error);
@@ -21,31 +23,45 @@ export async function authenticate() {
 }
 
 async function getUserRole() {
-  // Get the role from the selectedRole store
   return new Promise((resolve) => {
-    selectedRole.subscribe((role) => {
+    const unsubscribe = selectedRole.subscribe((role) => {
       resolve(role);
+      unsubscribe();
     });
   });
 }
 
 async function navigateToDashboard() {
   const role = await getUserRole();
-  if (role === 'regulator') {
-    window.location.href = '/regulators-dashboard';
-  } else if (role === 'manufacturer') {
-    window.location.href = '/manufacturer-dashboard';
-  } else if (role === 'pharmacy') {
-    window.location.href = '/pharmacies-dashboard';
-  } else if (role === 'consumer') {
-    window.location.href = '/consumers-dashboard';
-  } else if (role === 'governmentAgency') {
-    window.location.href = '/government-agencies-dashboard';
-  } else {
-    alert('Unknown role');
+  switch (role) {
+    case 'regulator':
+      window.location.href = '/regulators-dashboard';
+      break;
+    case 'manufacturer':
+      window.location.href = '/manufacturer-dashboard';
+      break;
+    case 'pharmacy':
+      window.location.href = '/pharmacies-dashboard';
+      break;
+    case 'patient':
+      window.location.href = '/consumers-dashboard';
+      break;
+    case 'governmentAgency':
+      window.location.href = '/government-agencies-dashboard';
+      break;
+    default:
+      alert('Unknown role selected. Please choose a valid role.');
   }
 }
 
-export async function handleSignIn() {
-  await authenticate();
+// Export the function if it is used in your Svelte component
+export async function handleSignUp() {
+  console.log("handleSignUp called");
+  try {
+    await authenticate();
+    signedIn = true;
+    showRoleSelectionPopup = true;
+  } catch (error) {
+    console.error("Authentication failed:", error);
+  }
 }
