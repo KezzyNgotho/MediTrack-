@@ -1,57 +1,43 @@
-import Patient "./patient";
-import Regulator "./Regulator";
-import Manufacturer "Manufacturer.mo";
-import Government "Government.mo";
+import Array "mo:base/Array";
+import Principal "mo:base/Principal";
+import ManufacturerActor "./ManufacturerActor";
+import GovernmentActor "./GovernmentActor";
+import PatientActor "./PatientActor";
 
-actor Main {
+actor MediTrack {
+  let manufacturer: ManufacturerActor = Actor.fromPrincipal(Principal.fromText("principal_id_for_manufacturer"));
+  let government: GovernmentActor = Actor.fromPrincipal(Principal.fromText("principal_id_for_government"));
+  let patient: PatientActor = Actor.fromPrincipal(Principal.fromText("principal_id_for_patient"));
 
-  // Create instances of the actors
-  stable var patientActor: [Principal] = [];
-  stable var regulatorActor: Principal = Regulator;
-  stable var manufacturerActor: [Principal] = [];
-  stable var governmentActor: Principal = Government;
-
-  // Function to add a new patient actor
-  public func createPatient(): async Principal {
-    let newPatient = await Patient();
-    patientActor := Array.append(patientActor, [newPatient]);
-    return newPatient;
+  public func createManufacturer(name: Text): async () {
+    await manufacturer.initManufacturer(name);
   };
 
-  // Function to add a new manufacturer actor
-  public func createManufacturer(): async Principal {
-    let newManufacturer = await Manufacturer();
-    manufacturerActor := Array.append(manufacturerActor, [newManufacturer]);
-    return newManufacturer;
+  public func addProductForManufacturer(productName: Text): async () {
+    await manufacturer.addProduct(productName);
   };
 
-  // Expose the government actor
-  public func getGovernmentActor(): async Principal {
-    return governmentActor;
+  public func getManufacturerProducts(): async [Text] {
+    return await manufacturer.getProducts();
   };
 
-  // Expose the regulator actor
-  public func getRegulatorActor(): async Principal {
-    return regulatorActor;
+  public func registerManufacturerToGovernment(id: Nat, name: Text, products: [Text]): async () {
+    await government.registerManufacturer(id, name, products);
   };
 
-  // Get the list of all patients
-  public func getPatientActors(): async [Principal] {
-    return patientActor;
+  public func getRegisteredManufacturers(): async [ManufacturerInfo] {
+    return await government.getManufacturers();
   };
 
-  // Get the list of all manufacturers
-  public func getManufacturerActors(): async [Principal] {
-    return manufacturerActor;
+  public func createPatient(name: Text): async () {
+    await patient.initPatient(name);
   };
 
-  // Clean up a patient actor (Example of deletion - might depend on certain criteria)
-  public func removePatient(patientId: Principal): async () {
-    patientActor := patientActor.filter(func (p) { p != patientId });
+  public func addMedicalRecordForPatient(record: MedicalRecord): async () {
+    await patient.addMedicalRecord(record);
   };
 
-  // Clean up a manufacturer actor (Example of deletion - might depend on certain criteria)
-  public func removeManufacturer(manufacturerId: Principal): async () {
-    manufacturerActor := manufacturerActor.filter(func (m) { m != manufacturerId });
+  public func getPatientRecords(): async [MedicalRecord] {
+    return await patient.getMedicalRecords();
   };
 }
