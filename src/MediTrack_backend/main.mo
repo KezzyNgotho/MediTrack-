@@ -1,43 +1,23 @@
 import Array "mo:base/Array";
-import Principal "mo:base/Principal";
-import ManufacturerActor "./ManufacturerActor";
-import GovernmentActor "./GovernmentActor";
-import PatientActor "./PatientActor";
 
-actor MediTrack {
-  let manufacturer: ManufacturerActor = Actor.fromPrincipal(Principal.fromText("principal_id_for_manufacturer"));
-  let government: GovernmentActor = Actor.fromPrincipal(Principal.fromText("principal_id_for_government"));
-  let patient: PatientActor = Actor.fromPrincipal(Principal.fromText("principal_id_for_patient"));
+actor {
+    type Product = {
+        id : Nat;
+        name : Text;
+        description : Text;
+    };
 
-  public func createManufacturer(name: Text): async () {
-    await manufacturer.initManufacturer(name);
-  };
+    var products : [Product] = [];
 
-  public func addProductForManufacturer(productName: Text): async () {
-    await manufacturer.addProduct(productName);
-  };
-
-  public func getManufacturerProducts(): async [Text] {
-    return await manufacturer.getProducts();
-  };
-
-  public func registerManufacturerToGovernment(id: Nat, name: Text, products: [Text]): async () {
-    await government.registerManufacturer(id, name, products);
-  };
-
-  public func getRegisteredManufacturers(): async [ManufacturerInfo] {
-    return await government.getManufacturers();
-  };
-
-  public func createPatient(name: Text): async () {
-    await patient.initPatient(name);
-  };
-
-  public func addMedicalRecordForPatient(record: MedicalRecord): async () {
-    await patient.addMedicalRecord(record);
-  };
-
-  public func getPatientRecords(): async [MedicalRecord] {
-    return await patient.getMedicalRecords();
-  };
-}
+   public func updateProduct(id : Nat, newName : Text, newDescription : Text) : async () {
+    var updatedProducts : [Product] = [];
+    for (product in products.vals()) {
+        if (product.id == id) {
+            updatedProducts := Array.append<Product>(updatedProducts, [{ id = id; name = newName; description = newDescription }]);
+        } else {
+            updatedProducts := Array.append<Product>(updatedProducts, [product]);
+        };
+    };
+    products := updatedProducts;
+};
+};
