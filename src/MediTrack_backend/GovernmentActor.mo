@@ -1,56 +1,39 @@
-import Debug "mo:base/Debug";
 import Array "mo:base/Array";
+import Principal "mo:base/Principal";
 
-module GovernmentModule {
-
-  // Define the ManufacturerInfo type within the module
-  public type ManufacturerInfo = {
+actor {
+  type Product = {
     id: Nat;
     name: Text;
-    products: [Text];
+    description: Text;
   };
 
-  // Initialize manufacturers state
-  public func initManufacturers(): [ManufacturerInfo] {
-    return [];
-  };
+  var products: [Product] = [];
+  var manufacturers: [Principal] = [];
 
-  // Initialize reports state
-  public func initReports(): [Text] {
-    return [];
-  };
+  public func registerManufacturer(manufacturer: Principal): async () {
+    manufacturers := Array.append<Principal>(manufacturers, [manufacturer]);
+  }
 
-  // Register a new manufacturer with an ID, name, and a list of products
-  public func registerManufacturer(
-    manufacturers: [ManufacturerInfo], 
-    id: Nat, 
-    name: Text, 
-    products: [Text]
-  ): [ManufacturerInfo] {
-    let manufacturer: ManufacturerInfo = { 
-      id = id; 
-      name = name; 
-      products = products 
-    };
-    // Append the new manufacturer to the list
-    return Array.append(manufacturers, [manufacturer]);
-  };
+  public func addProduct(id: Nat, name: Text, description: Text): async () {
+    let caller = Principal.fromActor(msg.caller);
+    if (Array.contains<Principal>(manufacturers, caller)) {
+      let product: Product = {id=id; name=name; description=description};
+      products := Array.append<Product>(products, [product]);
+    } else {
+      throw "Unauthorized";
+    }
+  }
 
-  // Report an issue to the government
- /*  public func reportIssue(reports: [Text], issueDetails: Text): [Text] {
-
-    // Append the new report to the list
-    return Array.append(reports, [issueDetails]);
-    Debug.print("New issue report: " # issueDetails);
-  };
- */
-  // Get the list of all registered manufacturers
-  public func getManufacturers(manufacturers: [ManufacturerInfo]): [ManufacturerInfo] {
-    return manufacturers;
-  };
-
-  // Get a list of all reports sent to the government
-  public func getReports(reports: [Text]): [Text] {
-    return reports;
-  };
+  public func updateProduct(id: Nat, newName: Text, newDescription: Text): async () {
+    var updatedProducts: [Product] = [];
+    for (product in products.vals()) {
+      if (product.id == id) {
+        updatedProducts := Array.append<Product>(updatedProducts, [{id=id; name=newName; description=newDescription}]);
+      } else {
+        updatedProducts := Array.append<Product>(updatedProducts, [product]);
+      }
+    }
+    products := updatedProducts;
+  }
 };
