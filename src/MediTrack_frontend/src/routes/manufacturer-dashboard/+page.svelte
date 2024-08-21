@@ -3,8 +3,55 @@
     import { Bar, Line, Pie } from 'svelte-chartjs';
     import { Chart, registerables } from 'chart.js';
     import './dashboard.scss';
-    import image from '../assets/icons8-human-100.png';
-  
+    import image from '../../../static/icons8-human-100.png';
+    import { onMount } from 'svelte';
+
+//integration
+import { getProducts } from './productServices';
+
+let searchQuery = '';
+
+  // Reactive filtered products array based on search query and approval status
+  $: filteredProducts = products.filter(product => 
+    product.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+  let newProduct = {
+    name: '',
+    category: '',
+    description: '',
+    price: 0,
+    quantity: 0,
+    expiryDate: '',
+    approved: false // Approval status
+  };
+  let products = [];
+
+  // Reactive total worth calculation
+  $: totalWorth = products.reduce((sum, product) => sum + (product.price * product.quantity), 0);
+
+  function addProduct() {
+    // Validate the new product data
+    if (newProduct.name && newProduct.category && newProduct.description && newProduct.price && newProduct.quantity && newProduct.expiryDate) {
+      // Add the new product to the products list
+      products = [...products, { ...newProduct }];
+      
+      // Clear the form
+      newProduct = {
+        name: '',
+        category: '',
+        description: '',
+        price: 0,
+        quantity: 0,
+        expiryDate: '',
+        approved: false // Reset approval status
+      };
+    }
+  }
+
+  function approveProduct(product) {
+    // Find the product in the list and set its approved status to true
+    products = products.map(p => p === product ? { ...p, approved: true } : p);
+  }
     Chart.register(...registerables);
   
     let selectedView = 'production';
@@ -58,7 +105,7 @@
         <div class="relative">
           <button class="flex items-center space-x-2" on:click={toggleProfileMenu}>
             <img src={image} alt="User Avatar" class="w-10 h-10 rounded-full border border-gray-300" />
-            <span class="font-semibold">Amshel Doe</span>
+            <span class="font-semibold">ICP Doe</span>
           </button>
           {#if isProfileMenuOpen}
             <div class="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg w-48">
@@ -143,126 +190,143 @@
   </section>
 {/if}
 
+{:else if selectedView == 'products'}
+<section>
+  <h2 class="text-2xl mb-4">Product List</h2>
+  <div class="bg-white p-6 rounded-lg shadow-md">
+    <!-- Search bar to filter products by name -->
+    <input
+      type="text"
+      placeholder="Search by product name"
+      bind:value={searchQuery}
+      class="mb-4 p-2 w-full border rounded-md"
+    />
+
+    <!-- Table displaying product information -->
+    <table class="min-w-full bg-white divide-y divide-gray-200">
+      <thead>
+        <tr>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product Name</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Expiry Date</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Worth</th>
+        </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-200">
+        {#each filteredProducts as product}
+          {#if product.approved} <!-- Only display approved products -->
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap">{product.name}</td>
+              <td class="px-6 py-4 whitespace-nowrap">{product.category}</td>
+              <td class="px-6 py-4 whitespace-nowrap">${product.price.toFixed(2)}</td>
+              <td class="px-6 py-4 whitespace-nowrap">{product.quantity}</td>
+              <td class="px-6 py-4 whitespace-nowrap">{new Date(product.expiryDate).toLocaleDateString()}</td>
+              <td class="px-6 py-4 whitespace-nowrap">${(product.price * product.quantity).toFixed(2)}</td>
+            </tr>
+          {/if}
+        {/each}
+      </tbody>
+    </table>
+  </div>
+</section>
 
 
 {:else if selectedView === 'inventory'}
-  <section>
-    <h2 class="text-2xl mb-4">Inventory Management</h2>
-    <div class="bg-white p-6 rounded-lg shadow-md">
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <!-- Current Inventory Levels -->
-        <div class="p-6 bg-white rounded-lg shadow-md">
-          <h3 class="text-xl font-semibold mb-2">Current Inventory Levels</h3>
-          <p class="mb-4">Overview of current inventory levels for key items.</p>
-          <div class="overflow-x-auto">
-            <table class="min-w-full bg-white divide-y divide-gray-200">
-              <thead>
-                <tr>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Item</th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Reorder Level</th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                </tr>
-              </thead>
-              <tbody class="bg-white divide-y divide-gray-200">
-                <tr>
-                  <td class="px-6 py-4 whitespace-nowrap">Widget A</td>
-                  <td class="px-6 py-4 whitespace-nowrap">150</td>
-                  <td class="px-6 py-4 whitespace-nowrap">100</td>
-                  <td class="px-6 py-4 whitespace-nowrap text-green-500">In Stock</td>
-                </tr>
-                <tr>
-                  <td class="px-6 py-4 whitespace-nowrap">Widget B</td>
-                  <td class="px-6 py-4 whitespace-nowrap">50</td>
-                  <td class="px-6 py-4 whitespace-nowrap">75</td>
-                  <td class="px-6 py-4 whitespace-nowrap text-red-500">Low Stock</td>
-                </tr>
-                <!-- Add more rows as needed -->
-              </tbody>
-            </table>
+<section>
+  <h2 class="text-2xl mb-4">Product Management</h2>
+  <div class="bg-white p-6 rounded-lg shadow-md">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Add New Product Form -->
+      <div class="p-6 bg-white rounded-lg shadow-md border-green-200">
+        <h3 class="text-xl font-semibold mb-2">Add New Product</h3>
+        <form class="space-y-4" on:submit|preventDefault={addProduct}>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="col-span-1">
+              <label for="product-name" class="block text-sm font-medium text-gray-700">Product Name</label>
+              <input id="product-name" type="text" bind:value={newProduct.name} class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required />
+            </div>
+            <div class="col-span-1">
+              <label for="product-category" class="block text-sm font-medium text-gray-700">Category</label>
+              <select id="product-category" bind:value={newProduct.category} class="mt-1 block w-full border-blue-600 rounded-md shadow-sm" required>
+                <option value="">Select Category</option>
+                <option value="Category1">Category 1</option>
+                <option value="Category2">Category 2</option>
+                <!-- Add more categories as needed -->
+              </select>
+            </div>
           </div>
-        </div>
-        <!-- Stock Alerts -->
-        <div class="p-6 bg-white rounded-lg shadow-md">
-          <h3 class="text-xl font-semibold mb-2">Stock Alerts</h3>
-          <p class="mb-4">Notifications for low or excess stock levels.</p>
-          <ul class="list-disc list-inside text-gray-600">
-            <li><span class="font-semibold text-red-600">Low Stock:</span> Widget B is below the reorder level.</li>
-            <li><span class="font-semibold text-green-600">Normal Stock:</span> Widget A is sufficiently stocked.</li>
-          </ul>
-        </div>
-        <!-- Inventory Trends -->
-        <div class="p-6 bg-white rounded-lg shadow-md">
-          <h3 class="text-xl font-semibold mb-2">Inventory Trends</h3>
-          <p class="mb-4">Trends in inventory levels over time.</p>
-          <div class="w-full h-64">
-            <Line data={{
-              labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-              datasets: [{
-                label: 'Inventory Levels',
-                backgroundColor: '#63b3ed',
-                borderColor: '#63b3ed',
-                data: [200, 180, 160, 140, 120, 100, 80]
-              }]
-            }} />
+          <div>
+            <label for="product-description" class="block text-sm font-medium text-gray-700">Description</label>
+            <textarea id="product-description" bind:value={newProduct.description} rows="4" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required></textarea>
           </div>
-        </div>
-        <!-- Recent Inventory Adjustments -->
-        <div class="p-6 bg-white rounded-lg shadow-md">
-          <h3 class="text-xl font-semibold mb-2">Recent Inventory Adjustments</h3>
-          <p class="mb-4">Summary of recent adjustments made to the inventory.</p>
-          <div class="overflow-x-auto">
-            <table class="min-w-full bg-white divide-y divide-gray-200">
-              <thead>
-                <tr>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Item</th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Adjustment</th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Reason</th>
-                </tr>
-              </thead>
-              <tbody class="bg-white divide-y divide-gray-200">
-                <tr>
-                  <td class="px-6 py-4 whitespace-nowrap">2024-07-31</td>
-                  <td class="px-6 py-4 whitespace-nowrap">Widget A</td>
-                  <td class="px-6 py-4 whitespace-nowrap">+50</td>
-                  <td class="px-6 py-4 whitespace-nowrap">Restock</td>
-                </tr>
-                <tr>
-                  <td class="px-6 py-4 whitespace-nowrap">2024-07-30</td>
-                  <td class="px-6 py-4 whitespace-nowrap">Widget B</td>
-                  <td class="px-6 py-4 whitespace-nowrap">-20</td>
-                  <td class="px-6 py-4 whitespace-nowrap">Sales</td>
-                </tr>
-                <!-- Add more rows as needed -->
-              </tbody>
-            </table>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="col-span-1">
+              <label for="product-price" class="block text-sm font-medium text-gray-700">Price</label>
+              <input id="product-price" type="number" bind:value={newProduct.price} step="0.01" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required />
+            </div>
+            <div class="col-span-1">
+              <label for="product-quantity" class="block text-sm font-medium text-gray-700">Quantity</label>
+              <input id="product-quantity" type="number" bind:value={newProduct.quantity} class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required />
+            </div>
           </div>
-        </div>
-        <!-- Inventory Value -->
-        <div class="p-6 bg-white rounded-lg shadow-md">
-          <h3 class="text-xl font-semibold mb-2">Inventory Value</h3>
-          <p class="mb-4">Current value of inventory based on item prices.</p>
-          <div class="w-full h-64">
-            <Bar data={{
-              labels: ['Widget A', 'Widget B'],
-              datasets: [{
-                label: 'Inventory Value',
-                backgroundColor: '#4c51bf',
-                borderColor: '#4c51bf',
-                data: [15000, 5000] // Example values
-              }]
-            }} />
+          <div>
+            <label for="product-expiry" class="block text-sm font-medium text-gray-700">Expiry Date</label>
+            <input id="product-expiry" type="date" bind:value={newProduct.expiryDate} class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required />
           </div>
+          <div>
+            <button type="submit" class="bg-[#0f535c] text-white px-4 py-2 rounded-md">Add Product</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Product List -->
+      <div class="p-6 bg-white rounded-lg shadow-md">
+        <h3 class="text-xl font-semibold mb-2">Product List</h3>
+        <div class="overflow-x-auto">
+          <table class="min-w-full bg-white divide-y divide-gray-200">
+            <thead>
+              <tr>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Expiry Date</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              {#each products as product}
+                <tr>
+                  <td class="px-6 py-4 whitespace-nowrap">{product.name}</td>
+                  <td class="px-6 py-4 whitespace-nowrap">{product.category}</td>
+                  <td class="px-6 py-4 whitespace-nowrap">{product.description}</td>
+                  <td class="px-6 py-4 whitespace-nowrap">${product.price}</td>
+                  <td class="px-6 py-4 whitespace-nowrap">{product.quantity}</td>
+                  <td class="px-6 py-4 whitespace-nowrap">{new Date(product.expiryDate).toLocaleDateString()}</td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    {product.approved ? 'Yes' : 'No'}
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    {#if !product.approved}
+                      <button on:click={() => approveProduct(product)} class="bg-green-500 text-white px-4 py-2 rounded-md">Approve</button>
+                    {/if}
+                  </td>
+                </tr>
+
+              {/each}
+            </tbody>
+          </table>
+        </div>
+         <!-- Display Total Worth -->
+         <div class="mt-4 text-right">
+          <h4 class="text-xl font-semibold">Total Worth: ${totalWorth.toFixed(2)}</h4>
         </div>
       </div>
     </div>
-  </section>
-
-
-
-
-
+  </div>
+</section>
 
   {:else if selectedView === 'quality'}
   <section>

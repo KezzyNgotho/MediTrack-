@@ -4,6 +4,7 @@
   import { Chart, registerables } from 'chart.js';
   import './styles/Dashboard.scss';
   import image from './../../../static/icons8-human-100.png';
+  
   Chart.register(...registerables);
 
   let selectedView = 'dashboard';

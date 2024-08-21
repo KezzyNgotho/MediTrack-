@@ -2,7 +2,7 @@
   import { createEventDispatcher } from 'svelte';
   import '../styles/Dashboard.scss';
   import { goto } from '$app/navigation'; // For programmatic navigation
-
+  
   const dispatch = createEventDispatcher();
 
   function handleLinkClick(view) {
@@ -16,7 +16,7 @@
 function logout() {
   // Clear session data (e.g., from local storage or authentication state)
   localStorage.removeItem('user'); // Example: removing the user session
-  goto('/home'); // Redirect to the login page after logout
+  goto('home'); // Redirect to the login page after logout
 }
 </script>
 
