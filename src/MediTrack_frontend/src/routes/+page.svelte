@@ -83,10 +83,10 @@
       <select on:change={handleRoleChange} class="role-select">
         <option value="">Select your role</option>
         <option value="patient">Patient</option>
-        <option value="patient">Patient</option>
+        <option value="patient">Pharmacy</option>
         <option value="regulator">Regulator</option>
-        <option value="manufacturer">Manufacturer</option>
-        <option value="governmentAgency">Government Agency</option>
+     <!--    <option value="manufacturer">Manufacturer</option> -->
+       <!--  <option value="governmentAgency">Government Agency</option> -->
       </select>
       <div class="popup-buttons">
         <button class="btn-primary" on:click={handleGetStarted}>
