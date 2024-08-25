@@ -101,7 +101,7 @@ let searchQuery = '';
   
     <main class="flex-1 p-6">
       <header class="flex items-center justify-between mb-6">
-        <h2 class="text-xl mb-4">Manufacturers Dashboard</h2>
+        <h2 class="text-xl mb-4">Pharmacy x</h2>
         <div class="relative">
           <button class="flex items-center space-x-2" on:click={toggleProfileMenu}>
             <img src={image} alt="User Avatar" class="w-10 h-10 rounded-full border border-gray-300" />
@@ -120,75 +120,135 @@ let searchQuery = '';
       </header>
   
       {#if selectedView === 'production'}
-        {#if selectedView === 'production'}
-  <section>
-    <h2 class="text-xl mb-4">Production Overview</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <!-- Units Produced -->
-      <div class="p-6 bg-white rounded-lg shadow-md">
-        <h3 class="text-xl font-semibold mb-2">Units Produced</h3>
-        <Bar data={barData} />
-      </div>
-      <!-- Production Over Time -->
-      <div class="p-6 bg-white rounded-lg shadow-md">
-        <h3 class="text-xl font-semibold mb-2">Production Over Time</h3>
-        <Line data={lineData} />
-      </div>
-      <!-- Production Efficiency -->
-      <div class="p-6 bg-white rounded-lg shadow-md">
-        <h3 class="text-xl font-semibold mb-2">Production Efficiency</h3>
-        <p class="mb-4">Overall Efficiency: 85%</p>
-        <p>Downtime: 12 hours this month</p>
-        <div class="w-full h-64">
-          <Pie data={pieData} />
+      <section>
+        <h2 class="text-xl mb-4">Pharmacy Overview</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Medication Inventory -->
+          <div class="p-6 bg-white rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold mb-2">Medication Inventory</h3>
+            <!-- Insert a bar chart showing the number of medications in stock by category -->
+            <Bar data={{
+              labels: ['Painkillers', 'Antibiotics', 'Vitamins', 'Cold & Flu'],
+              datasets: [{
+                label: 'Medication Inventory',
+                backgroundColor: '#63b3ed',
+                borderColor: '#63b3ed',
+                data: [200, 150, 100, 80]
+              }]
+            }} />
+          </div>
+          <!-- Prescription Trends -->
+          <div class="p-6 bg-white rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold mb-2">Prescription Trends</h3>
+            <!-- Insert a line chart showing prescription trends over time -->
+            <Line data={{
+              labels: ['January', 'February', 'March', 'April'],
+              datasets: [{
+                label: 'Number of Prescriptions',
+                backgroundColor: '#f6ad55',
+                borderColor: '#f6ad55',
+                data: [300, 320, 280, 350]
+              }]
+            }} />
+          </div>
+          <!-- Medication Compliance -->
+          <div class="p-6 bg-white rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold mb-2">Medication Compliance</h3>
+            <p class="mb-4">Overall Compliance Rate: 92%</p>
+            <p>Missed Doses: 4% this month</p>
+            <div class="w-full h-64">
+              <!-- Insert a pie chart showing medication compliance distribution -->
+              <Pie data={{
+                labels: ['Adhered', 'Missed Doses'],
+                datasets: [{
+                  label: 'Compliance Rate',
+                  backgroundColor: ['#48bb78', '#f56565'],
+                  data: [92, 8]
+                }]
+              }} />
+            </div>
+          </div>
+          <!-- Sales Forecast -->
+          <div class="p-6 bg-white rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold mb-2">Sales Forecast</h3>
+            <p class="mb-4">Projected sales for the next quarter based on current trends.</p>
+            <div class="w-full h-64">
+              <!-- Insert a forecast chart here, e.g., a Line chart for sales projections -->
+              <Line data={{
+                labels: ['August', 'September', 'October', 'November'],
+                datasets: [{
+                  label: 'Projected Sales',
+                  backgroundColor: '#f6ad55',
+                  borderColor: '#f6ad55',
+                  data: [7000, 7200, 7500, 7800]
+                }]
+              }} />
+            </div>
+          </div>
+          <!-- Demand Curve for Medications -->
+          <div class="p-6 bg-white rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold mb-2">Medication Demand Curve</h3>
+            <p class="mb-4">Visualize the demand trends for various medications over the past year.</p>
+            <div class="w-full h-64">
+              <!-- Insert a line chart showing the demand curve for different medications -->
+              <Line data={{
+                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                datasets: [
+                  {
+                    label: 'Painkillers',
+                    backgroundColor: '#63b3ed',
+                    borderColor: '#63b3ed',
+                    data: [150, 160, 140, 170, 180, 190, 200, 210, 220, 230, 240, 250]
+                  },
+                  {
+                    label: 'Antibiotics',
+                    backgroundColor: '#f6ad55',
+                    borderColor: '#f6ad55',
+                    data: [100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200, 210]
+                  },
+                  {
+                    label: 'Vitamins',
+                    backgroundColor: '#68d391',
+                    borderColor: '#68d391',
+                    data: [80, 85, 90, 95, 100, 105, 110, 115, 120, 125, 130, 135]
+                  }
+                ]
+              }} />
+            </div>
+          </div>
+          <!-- Inventory Bottlenecks -->
+          <div class="p-6 bg-white rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold mb-2">Inventory Bottlenecks</h3>
+            <p class="mb-4">Identify and address issues affecting medication availability and pharmacy operations.</p>
+            <ul class="list-disc list-inside text-gray-600">
+              <li>Supplier Delays</li>
+              <li>Inventory Management Issues</li>
+              <li>Regulatory Compliance Challenges</li>
+              <li>Staff Shortages</li>
+            </ul>
+          </div>
+          <!-- Operational Costs -->
+          <div class="p-6 bg-white rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold mb-2">Operational Costs</h3>
+            <p class="mb-4">Breakdown of operational costs by category.</p>
+            <div class="w-full h-64">
+              <!-- Insert a pie chart or bar chart here for cost breakdown -->
+              <Pie data={{
+                labels: ['Medication Costs', 'Staff Salaries', 'Utilities', 'Other Expenses'],
+                datasets: [{
+                  label: 'Cost Breakdown',
+                  backgroundColor: ['#68d391', '#63b3ed', '#f6ad55', '#f56565'],
+                  data: [50, 25, 15, 10]
+                }]
+              }} />
+            </div>
+          </div>
         </div>
-      </div>
-      <!-- Production Forecast -->
-      <div class="p-6 bg-white rounded-lg shadow-md">
-        <h3 class="text-xl font-semibold mb-2">Production Forecast</h3>
-        <p class="mb-4">Projected production for the next quarter based on current trends.</p>
-        <div class="w-full h-64">
-          <!-- Insert a forecast chart here, e.g., a Line chart for projections -->
-          <Line data={{
-            labels: ['August', 'September', 'October', 'November'],
-            datasets: [{
-              label: 'Forecasted Production',
-              backgroundColor: '#f6ad55',
-              borderColor: '#f6ad55',
-              data: [1100, 1200, 1300, 1400]
-            }]
-          }} />
-        </div>
-      </div>
-      <!-- Production Bottlenecks -->
-      <div class="p-6 bg-white rounded-lg shadow-md">
-        <h3 class="text-xl font-semibold mb-2">Production Bottlenecks</h3>
-        <p class="mb-4">Identify and address issues affecting production efficiency.</p>
-        <ul class="list-disc list-inside text-gray-600">
-          <li>Machine Downtime</li>
-          <li>Supply Chain Delays</li>
-          <li>Labor Shortages</li>
-        </ul>
-      </div>
-      <!-- Production Costs -->
-      <div class="p-6 bg-white rounded-lg shadow-md">
-        <h3 class="text-xl font-semibold mb-2">Production Costs</h3>
-        <p class="mb-4">Breakdown of production costs by category.</p>
-        <div class="w-full h-64">
-          <!-- Insert a pie chart or bar chart here for cost breakdown -->
-          <Pie data={{
-            labels: ['Raw Materials', 'Labor', 'Maintenance', 'Overheads'],
-            datasets: [{
-              label: 'Cost Breakdown',
-              backgroundColor: ['#68d391', '#63b3ed', '#f6ad55', '#f56565'],
-              data: [40, 25, 20, 15]
-            }]
-          }} />
-        </div>
-      </div>
-    </div>
-  </section>
-{/if}
+      </section>
+      
+  
+
+
 
 {:else if selectedView == 'products'}
 <section>
@@ -251,9 +311,10 @@ let searchQuery = '';
               <label for="product-category" class="block text-sm font-medium text-gray-700">Category</label>
               <select id="product-category" bind:value={newProduct.category} class="mt-1 block w-full border-blue-600 rounded-md shadow-sm" required>
                 <option value="">Select Category</option>
-                <option value="Category1">Category 1</option>
-                <option value="Category2">Category 2</option>
-                <!-- Add more categories as needed -->
+                <!-- Categories should be dynamically populated based on available categories -->
+                {#each categories as category}
+                  <option value={category}>{category}</option>
+                {/each}
               </select>
             </div>
           </div>
@@ -294,6 +355,8 @@ let searchQuery = '';
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Expiry Date</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Approved</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
               </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
@@ -312,21 +375,23 @@ let searchQuery = '';
                     {#if !product.approved}
                       <button on:click={() => approveProduct(product)} class="bg-green-500 text-white px-4 py-2 rounded-md">Approve</button>
                     {/if}
+                    <button on:click={() => editProduct(product)} class="bg-yellow-500 text-white px-4 py-2 rounded-md ml-2">Edit</button>
+                    <button on:click={() => deleteProduct(product)} class="bg-red-500 text-white px-4 py-2 rounded-md ml-2">Delete</button>
                   </td>
                 </tr>
-
               {/each}
             </tbody>
           </table>
         </div>
-         <!-- Display Total Worth -->
-         <div class="mt-4 text-right">
+        <!-- Display Total Worth -->
+        <div class="mt-4 text-right">
           <h4 class="text-xl font-semibold">Total Worth: ${totalWorth.toFixed(2)}</h4>
         </div>
       </div>
     </div>
   </div>
 </section>
+
 
   {:else if selectedView === 'quality'}
   <section>

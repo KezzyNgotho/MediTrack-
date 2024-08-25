@@ -811,4 +811,3 @@ function unhideProduct(index) {
 <style>
   /* Add custom styles here if needed */
 </style>
-

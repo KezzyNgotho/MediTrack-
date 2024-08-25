@@ -48,8 +48,8 @@
       case 'regulator':
         window.location.href = '/regulators-dashboard';
         break;
-      case 'manufacturer':
-        window.location.href = '/manufacturer-dashboard';
+      case 'pharmacy':
+        window.location.href = '/pharmacies-dashboard';
         break;
       case 'governmentAgency':
         window.location.href = '/government-agencies-dashboard';
@@ -83,7 +83,7 @@
       <select on:change={handleRoleChange} class="role-select">
         <option value="">Select your role</option>
         <option value="patient">Patient</option>
-        <option value="patient">Pharmacy</option>
+        <option value="pharmacy">pharmacy</option>
         <option value="regulator">Regulator</option>
      <!--    <option value="manufacturer">Manufacturer</option> -->
        <!--  <option value="governmentAgency">Government Agency</option> -->

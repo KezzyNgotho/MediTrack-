@@ -37,18 +37,14 @@ async function navigateToDashboard() {
     case 'regulator':
       window.location.href = '/regulators-dashboard';
       break;
-    case 'manufacturer':
-      window.location.href = '/manufacturer-dashboard';
-      break;
-    case 'pharmacy':
-      window.location.href = '/pharmacies-dashboard';
-      break;
+    
     case 'patient':
       window.location.href = '/consumers-dashboard';
       break;
-    case 'governmentAgency':
-      window.location.href = '/government-agencies-dashboard';
+      case 'pharmacy':
+      window.location.href = '/pharmacies-dashboard';
       break;
+    
     default:
       alert('Unknown role selected. Please choose a valid role.');
   }
